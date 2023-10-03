@@ -27,6 +27,9 @@ pub struct RawStatement {
     statement_cache_key: Option<Arc<str>>,
 }
 
+unsafe impl Sync for RawStatement {}
+unsafe impl Send for RawStatement {}
+
 impl RawStatement {
     #[inline]
     pub unsafe fn new(stmt: *mut ffi::sqlite3_stmt, tail: usize) -> RawStatement {
