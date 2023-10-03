@@ -38,6 +38,7 @@ pub struct InnerConnection {
 }
 
 unsafe impl Send for InnerConnection {}
+unsafe impl Sync for InnerConnection {}
 
 impl InnerConnection {
     #[allow(clippy::mutex_atomic)]
