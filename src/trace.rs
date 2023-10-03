@@ -77,7 +77,7 @@ impl Connection {
             drop(catch_unwind(|| trace_fn(&s)));
         }
 
-        let c = self.db.borrow_mut();
+        let c = self.db.write().unwrap();
         match trace_fn {
             Some(f) => unsafe {
                 ffi::sqlite3_trace(c.db(), Some(trace_callback), f as *mut c_void);
@@ -111,7 +111,7 @@ impl Connection {
             drop(catch_unwind(|| profile_fn(&s, duration)));
         }
 
-        let c = self.db.borrow_mut();
+        let c = self.db.write().unwrap();
         match profile_fn {
             Some(f) => unsafe {
                 ffi::sqlite3_profile(c.db(), Some(profile_callback), f as *mut c_void)

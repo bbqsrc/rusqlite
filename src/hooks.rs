@@ -347,7 +347,7 @@ impl Connection {
     where
         F: FnMut() -> bool + Send + 'static,
     {
-        self.db.borrow_mut().commit_hook(hook);
+        self.db.write().unwrap().commit_hook(hook);
     }
 
     /// Register a callback function to be invoked whenever
@@ -357,7 +357,7 @@ impl Connection {
     where
         F: FnMut() + Send + 'static,
     {
-        self.db.borrow_mut().rollback_hook(hook);
+        self.db.write().unwrap().rollback_hook(hook);
     }
 
     /// Register a callback function to be invoked whenever
@@ -375,7 +375,7 @@ impl Connection {
     where
         F: FnMut(Action, &str, &str, i64) + Send + 'static,
     {
-        self.db.borrow_mut().update_hook(hook);
+        self.db.write().unwrap().update_hook(hook);
     }
 
     /// Register a query progress callback.
@@ -390,7 +390,7 @@ impl Connection {
     where
         F: FnMut() -> bool + Send + RefUnwindSafe + 'static,
     {
-        self.db.borrow_mut().progress_handler(num_ops, handler);
+        self.db.write().unwrap().progress_handler(num_ops, handler);
     }
 
     /// Register an authorizer callback that's invoked
@@ -400,7 +400,7 @@ impl Connection {
     where
         F: for<'r> FnMut(AuthContext<'r>) -> Authorization + Send + RefUnwindSafe + 'static,
     {
-        self.db.borrow_mut().authorizer(hook);
+        self.db.write().unwrap().authorizer(hook);
     }
 }
 

@@ -390,7 +390,7 @@ impl Connection {
         T: ToSql,
     {
         self.db
-            .borrow_mut()
+            .write().unwrap()
             .create_scalar_function(fn_name, n_arg, flags, x_func)
     }
 
@@ -414,7 +414,7 @@ impl Connection {
         T: ToSql,
     {
         self.db
-            .borrow_mut()
+            .write().unwrap()
             .create_aggregate_function(fn_name, n_arg, flags, aggr)
     }
 
@@ -439,7 +439,7 @@ impl Connection {
         T: ToSql,
     {
         self.db
-            .borrow_mut()
+            .write().unwrap()
             .create_window_function(fn_name, n_arg, flags, aggr)
     }
 
@@ -455,7 +455,7 @@ impl Connection {
     /// Will return Err if the function could not be removed.
     #[inline]
     pub fn remove_function(&self, fn_name: &str, n_arg: c_int) -> Result<()> {
-        self.db.borrow_mut().remove_function(fn_name, n_arg)
+        self.db.write().unwrap().remove_function(fn_name, n_arg)
     }
 }
 

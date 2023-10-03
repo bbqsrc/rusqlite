@@ -517,7 +517,7 @@ impl Connection {
         &self,
         db_name: Option<crate::DatabaseName<'_>>,
     ) -> Result<TransactionState> {
-        self.db.borrow().txn_state(db_name)
+        self.db.read().unwrap().txn_state(db_name)
     }
 }
 

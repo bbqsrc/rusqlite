@@ -821,7 +821,7 @@ impl Connection {
         module: &'static Module<'vtab, T>,
         aux: Option<T::Aux>,
     ) -> Result<()> {
-        self.db.borrow_mut().create_module(module_name, module, aux)
+        self.db.write().unwrap().create_module(module_name, module, aux)
     }
 }
 

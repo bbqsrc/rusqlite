@@ -44,7 +44,7 @@ impl Session<'_> {
     ) -> Result<Session<'conn>> {
         let name = name.as_cstring()?;
 
-        let db = db.db.borrow_mut().db;
+        let db = db.db.write().unwrap().db;
 
         let mut s: *mut ffi::sqlite3_session = ptr::null_mut();
         check(unsafe { ffi::sqlite3session_create(db, name.as_ptr(), &mut s) })?;
@@ -584,7 +584,7 @@ impl Connection {
         F: Fn(&str) -> bool + Send + RefUnwindSafe + 'static,
         C: Fn(ConflictType, ChangesetItem) -> ConflictAction + Send + RefUnwindSafe + 'static,
     {
-        let db = self.db.borrow_mut().db;
+        let db = self.db.write().unwrap().db;
 
         let filtered = filter.is_some();
         let tuple = &mut (filter, conflict);
@@ -623,7 +623,7 @@ impl Connection {
         C: Fn(ConflictType, ChangesetItem) -> ConflictAction + Send + RefUnwindSafe + 'static,
     {
         let input_ref = &input;
-        let db = self.db.borrow_mut().db;
+        let db = self.db.write().unwrap().db;
 
         let filtered = filter.is_some();
         let tuple = &mut (filter, conflict);

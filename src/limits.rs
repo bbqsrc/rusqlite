@@ -50,7 +50,7 @@ impl Connection {
     #[inline]
     #[cfg_attr(docsrs, doc(cfg(feature = "limits")))]
     pub fn limit(&self, limit: Limit) -> i32 {
-        let c = self.db.borrow();
+        let c = self.db.read().unwrap();
         unsafe { ffi::sqlite3_limit(c.db(), limit as c_int, -1) }
     }
 
@@ -59,7 +59,7 @@ impl Connection {
     #[inline]
     #[cfg_attr(docsrs, doc(cfg(feature = "limits")))]
     pub fn set_limit(&self, limit: Limit, new_val: i32) -> i32 {
-        let c = self.db.borrow_mut();
+        let c = self.db.write().unwrap();
         unsafe { ffi::sqlite3_limit(c.db(), limit as c_int, new_val) }
     }
 }

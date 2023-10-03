@@ -21,7 +21,7 @@ impl Connection {
         C: Fn(&str, &str) -> Ordering + Send + UnwindSafe + 'static,
     {
         self.db
-            .borrow_mut()
+            .write().unwrap()
             .create_collation(collation_name, x_compare)
     }
 
@@ -31,13 +31,13 @@ impl Connection {
         &self,
         x_coll_needed: fn(&Connection, &str) -> Result<()>,
     ) -> Result<()> {
-        self.db.borrow_mut().collation_needed(x_coll_needed)
+        self.db.write().unwrap().collation_needed(x_coll_needed)
     }
 
     /// Remove collation.
     #[inline]
     pub fn remove_collation(&self, collation_name: &str) -> Result<()> {
-        self.db.borrow_mut().remove_collation(collation_name)
+        self.db.write().unwrap().remove_collation(collation_name)
     }
 }
 

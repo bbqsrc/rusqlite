@@ -206,13 +206,13 @@ impl Backup<'_, '_> {
         let to_name = to_name.as_cstring()?;
         let from_name = from_name.as_cstring()?;
 
-        let to_db = to.db.borrow_mut().db;
+        let to_db = to.db.write().unwrap().db;
 
         let b = unsafe {
             let b = ffi::sqlite3_backup_init(
                 to_db,
                 to_name.as_ptr(),
-                from.db.borrow_mut().db,
+                from.db.write().unwrap().db,
                 from_name.as_ptr(),
             );
             if b.is_null() {
